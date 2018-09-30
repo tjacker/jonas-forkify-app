@@ -1,0 +1,22 @@
+{
+  "name": "jonas-forkify-app",
+  "version": "1.0.0",
+  "description": "Jonas Schmedtmann JavaScript Course",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MitHipster/jonas-forkify-app.git"
+  },
+  "author": "Jonas Schmedtmann",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MitHipster/jonas-forkify-app/issues"
+  },
+  "homepage": "https://github.com/MitHipster/jonas-forkify-app#readme",
+  "devDependencies": {
+    "webpack": "^4.2.0"
+  }
+}
