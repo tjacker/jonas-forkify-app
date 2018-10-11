@@ -26,5 +26,9 @@ module.exports = {
 				}
 			}
 		]
+	},
+	// Prevents dotenv from throwing an error
+	node: {
+		fs: 'empty'
 	}
 };
