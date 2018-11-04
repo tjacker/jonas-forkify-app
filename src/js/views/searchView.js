@@ -6,7 +6,7 @@ export const clearInput = () => {
 	elements.searchInput.value = '';
 };
 export const clearResults = () => {
-	elements.searchResultList.innerHTML = '';
+	elements.searchResultsList.innerHTML = '';
 };
 export const limitRecipeTitle = (title, limit = 30) => {
 	const truncTitle = [];
@@ -37,7 +37,7 @@ const renderRecipe = recipe => {
 				</a>
 		</li>
 		`;
-	elements.searchResultList.insertAdjacentHTML('beforeend', markup);
+	elements.searchResultsList.insertAdjacentHTML('beforeend', markup);
 };
 
 export const renderResults = recipes => recipes.forEach(renderRecipe);
