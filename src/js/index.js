@@ -1,10 +1,14 @@
 import Search from './models/Search';
+import Recipe from './models/Recipe';
 import * as searchView from './views/searchView';
 import { elements, renderLoader, clearLoader } from './views/base';
 
 // Store global state of the app
 const state = {};
 
+/**
+ * SEARCH CONTROLLER
+ */
 const controlSearch = async () => {
 	// Get query from view
 	const query = searchView.getInput();
@@ -18,14 +22,21 @@ const controlSearch = async () => {
 		searchView.clearInput();
 		renderLoader(elements.searchResults);
 
-		// Search for recipes
-		await state.search.getResults();
+		try {
+			// Search for recipes
+			await state.search.getResults();
 
-		// Clear loading indicator
-		clearLoader();
+			// Clear loading indicator
+			clearLoader();
 
-		// Render results in UI
-		searchView.renderResults(state.search.result);
+			// Render results in UI
+			searchView.renderResults(state.search.result);
+		} catch (error) {
+			console.error(error);
+			alert('There was a problem with your search. Please try again.');
+			// Clear loading indicator
+			clearLoader();
+		}
 	}
 };
 
@@ -45,3 +56,39 @@ elements.searchResultsPages.addEventListener('click', e => {
 		searchView.renderResults(state.search.result, gotoPage);
 	}
 });
+
+/**
+ * RECIPE CONTROLLER
+ */
+const controlRecipe = async () => {
+	const id = window.location.hash.substring(1);
+
+	if (id) {
+		// Prepare UI for changes
+
+		// Create new recipe object
+		state.recipe = new Recipe(id);
+
+		try {
+			// Get recipe data
+			await state.recipe.getRecipe();
+
+			// Calculate time and get servings
+			state.recipe.calcTime();
+			state.recipe.servings;
+
+			// Render recipe
+			console.dir(state.recipe);
+		} catch (error) {
+			console.error(error);
+			alert('Unable to retrieve selected recipe. Please try again.');
+		}
+	}
+};
+// window.addEventListener('hashchange', controlRecipe);
+// window.addEventListener('load', controlRecipe);
+
+// The above event listeners can be created using forEach
+['hashchange', 'load'].forEach(event =>
+	window.addEventListener(event, controlRecipe)
+);

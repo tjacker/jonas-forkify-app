@@ -2,7 +2,7 @@ import { elements } from './base';
 
 export const getInput = () => elements.searchInput.value;
 export const clearInput = () => {
-	// Wrapped in curly braces so there is no implicit return
+	// Wrapped in curly braces so there is no implicit return statement
 	elements.searchInput.value = '';
 };
 export const clearResults = () => {
@@ -25,6 +25,7 @@ export const limitRecipeTitle = (title, limit = 30) => {
 
 const renderRecipe = recipe => {
 	const { recipe_id: id, image_url: image, title, publisher } = recipe;
+	// Hash symbol in front of id prevents a page load
 	const markup = `
 		<li>
 				<a class="results__link" href="#${id}" title="${title}">
