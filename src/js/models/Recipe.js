@@ -4,7 +4,8 @@ import axios from 'axios';
 export default class Recipe {
 	constructor(id) {
 		this.id = id;
-		this.servings = 4; // Placeholder - no date provided
+		this.time = [30, 60, 90][Math.floor(Math.random() * 3)]; // Placeholder - no data provided
+		this.servings = [4, 6, 8][Math.floor(Math.random() * 3)]; // Placeholder - no data provided
 	}
 
 	async getRecipe() {
@@ -16,17 +17,93 @@ export default class Recipe {
 			this.result = res.data.recipe;
 		} catch (error) {
 			console.error(error);
-			alert('Unable to retrieve recipes. Please try again.');
+			alert('Unable to retrieve recipe(s). Please try again later.');
 		}
 	}
 
-	calcTime() {
-		// Simulated cooking time calculation
-		// 15 minutes for every 3 ingredients
-		const r = this.result;
-		console.log(r);
-		const numberOfIngredients = r.ingredients.length;
-		const timePeriods = Math.ceil(numberOfIngredients / 3);
-		this.time = timePeriods * 15;
+	parseIngredients() {
+		const result = this.result;
+		const table = [
+			['tablespoons', 'tbsp'],
+			['tablespoon', 'tbsp'],
+			['tbsp', 'tbsp'],
+			['teaspoons', 'tsp'],
+			['teaspoon', 'tsp'],
+			['cups', 'cups'],
+			['cup', 'cup'],
+			['pounds', 'lbs'],
+			['pound', 'lb'],
+			['ounces', 'oz'],
+			['ounce', 'oz']
+		];
+
+		// Helper functions
+		const fn = {
+			// Standardize units of measure on ingredient
+			convertUnits: ingredient => {
+				table.forEach(unit => {
+					const regex = new RegExp(unit[0], 'gi');
+					ingredient = ingredient.replace(regex, unit[1]);
+				});
+				return ingredient;
+			},
+			// Remove parenthesis block the converts measurements into ounces
+			removeConversionToOz: ingredient =>
+				ingredient.replace(/ \([^()]*?(oz)\)/i, ''),
+			// Locate position of unit of measure in ingredients array
+			getUnitIndex: array => {
+				// Create array of unit abbreviations
+				const unitAbbreviations = table.map(unit => unit[1]);
+				return array.findIndex(element => unitAbbreviations.includes(element));
+			},
+			// Return ingredient array as a structured object
+			createIngredientObj: (index, array, ingredient) => {
+				let amount, unit;
+				if (index >= 1 && index <= 2) {
+					// Unit could consist of one or more array elements
+					// Ex. 4 1/2 cups: ingredientAmount is [4, 1/2]
+					amount = array.slice(0, index);
+					// Handle cases where measurements are represented as 1-1/4 cups
+					return {
+						amount:
+							amount.length === 1
+								? eval(amount[0].replace('-', '+'))
+								: eval(amount.join('+')),
+						unit: array[index],
+						ingredient: array.slice(index + 1).join(' ')
+					};
+				} else if (parseInt(array[0], 10)) {
+					// There is no unit, but first element is a number
+					return {
+						amount: parseInt(array[0], 10),
+						unit: null,
+						ingredient: array.slice(1).join(' ')
+					};
+				} else {
+					// There is no unit and no number in first position
+					return {
+						amount: null,
+						unit: null,
+						ingredient
+					};
+				}
+			}
+		};
+
+		const revisedIngredients = result.ingredients.map(i => {
+			let ingredient = fn.convertUnits(i.trim());
+			ingredient = fn.removeConversionToOz(ingredient);
+
+			// Parse ingredients into amount, unit, and ingredient
+			const ingredientArray = ingredient.split(' ');
+			const unitIndex = fn.getUnitIndex(ingredientArray);
+			const ingredientObject = fn.createIngredientObj(
+				unitIndex,
+				ingredientArray,
+				ingredient
+			);
+			return ingredientObject;
+		});
+		this.revisedIngredients = revisedIngredients;
 	}
 }

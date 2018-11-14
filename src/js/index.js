@@ -33,7 +33,7 @@ const controlSearch = async () => {
 			searchView.renderResults(state.search.result);
 		} catch (error) {
 			console.error(error);
-			alert('There was a problem with your search. Please try again.');
+			alert('There was a problem with your search. Please try again later.');
 			// Clear loading indicator
 			clearLoader();
 		}
@@ -70,12 +70,9 @@ const controlRecipe = async () => {
 		state.recipe = new Recipe(id);
 
 		try {
-			// Get recipe data
+			// Get recipe data and parse ingredients
 			await state.recipe.getRecipe();
-
-			// Calculate time and get servings
-			state.recipe.calcTime();
-			state.recipe.servings;
+			state.recipe.parseIngredients();
 
 			// Render recipe
 			console.dir(state.recipe);
@@ -85,10 +82,11 @@ const controlRecipe = async () => {
 		}
 	}
 };
-// window.addEventListener('hashchange', controlRecipe);
+// Commented out load event due to a 50/day search limit
+window.addEventListener('hashchange', controlRecipe);
 // window.addEventListener('load', controlRecipe);
 
 // The above event listeners can be created using forEach
-['hashchange', 'load'].forEach(event =>
-	window.addEventListener(event, controlRecipe)
-);
+// ['hashchange', 'load'].forEach(event =>
+// 	window.addEventListener(event, controlRecipe)
+// );
