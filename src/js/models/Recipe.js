@@ -34,7 +34,15 @@ export default class Recipe {
 			['pounds', 'lbs'],
 			['pound', 'lb'],
 			['ounces', 'oz'],
-			['ounce', 'oz']
+			['ounce', 'oz'],
+			['kilograms', 'kg'],
+			['kilogram', 'kg'],
+			['grams', 'g'],
+			['gram', 'g'],
+			['liters', 'l'],
+			['liter', 'l'],
+			['milliliters', 'ml'],
+			['milliliter', 'ml']
 		];
 
 		// Helper functions
@@ -49,7 +57,7 @@ export default class Recipe {
 			},
 			// Remove parenthesis block the converts measurements into ounces
 			removeConversionToOz: ingredient =>
-				ingredient.replace(/ \([^()]*?(oz)\)/i, ''),
+				ingredient.replace(/ \([^()]*?(oz|g|ml)\)/i, ''),
 			// Locate position of unit of measure in ingredients array
 			getUnitIndex: array => {
 				// Create array of unit abbreviations

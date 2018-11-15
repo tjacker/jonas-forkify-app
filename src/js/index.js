@@ -1,6 +1,7 @@
 import Search from './models/Search';
 import Recipe from './models/Recipe';
 import * as searchView from './views/searchView';
+import * as recipeView from './views/recipeView';
 import { elements, renderLoader, clearLoader } from './views/base';
 
 // Store global state of the app
@@ -65,6 +66,8 @@ const controlRecipe = async () => {
 
 	if (id) {
 		// Prepare UI for changes
+		recipeView.clearResults();
+		renderLoader(elements.recipe);
 
 		// Create new recipe object
 		state.recipe = new Recipe(id);
@@ -74,11 +77,17 @@ const controlRecipe = async () => {
 			await state.recipe.getRecipe();
 			state.recipe.parseIngredients();
 
+			// Clear loading indicator
+			clearLoader();
+
 			// Render recipe
+			recipeView.renderRecipe(state.recipe);
 			console.dir(state.recipe);
 		} catch (error) {
 			console.error(error);
 			alert('Unable to retrieve selected recipe. Please try again.');
+			// Clear loading indicator
+			clearLoader();
 		}
 	}
 };
