@@ -66,31 +66,31 @@ export default class Recipe {
 			},
 			// Return ingredient array as a structured object
 			createIngredientObj: (index, array, ingredient) => {
-				let amount, unit;
+				let count, unit;
 				if (index >= 1 && index <= 2) {
 					// Unit could consist of one or more array elements
-					// Ex. 4 1/2 cups: ingredientAmount is [4, 1/2]
-					amount = array.slice(0, index);
+					// Ex. 4 1/2 cups is [4, 1/2]
+					count = array.slice(0, index);
 					// Handle cases where measurements are represented as 1-1/4 cups
 					return {
-						amount:
-							amount.length === 1
-								? eval(amount[0].replace('-', '+'))
-								: eval(amount.join('+')),
+						count:
+							count.length === 1
+								? eval(count[0].replace('-', '+'))
+								: eval(count.join('+')),
 						unit: array[index],
 						ingredient: array.slice(index + 1).join(' ')
 					};
 				} else if (parseInt(array[0], 10)) {
 					// There is no unit, but first element is a number
 					return {
-						amount: parseInt(array[0], 10),
+						count: parseInt(array[0], 10),
 						unit: null,
 						ingredient: array.slice(1).join(' ')
 					};
 				} else {
 					// There is no unit and no number in first position
 					return {
-						amount: null,
+						count: null,
 						unit: null,
 						ingredient
 					};
@@ -102,7 +102,7 @@ export default class Recipe {
 			let ingredient = fn.convertUnits(i.trim());
 			ingredient = fn.removeConversionToOz(ingredient);
 
-			// Parse ingredients into amount, unit, and ingredient
+			// Parse ingredients into count, unit, and ingredient
 			const ingredientArray = ingredient.split(' ');
 			const unitIndex = fn.getUnitIndex(ingredientArray);
 			const ingredientObject = fn.createIngredientObj(

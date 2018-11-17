@@ -1,13 +1,17 @@
 import { elements } from './base';
+import Fraction from 'fraction.js';
+
+// Convert count back to a fraction
+const formatCount = a => (a ? new Fraction(a).toFraction(true) : '');
 
 const createIngredientHTML = i => `
 	<li class="recipe__item">
 		<svg class="recipe__icon">
 			<use href="img/icons.svg#icon-check"></use>
 		</svg>
-		<div class="recipe__count">${i.amount}</div>
 		<div class="recipe__ingredient">
-			<span class="recipe__unit">${i.unit}</span> ${i.ingredient}
+			<span class="recipe__count">${formatCount(i.count)}</span>
+			<span class="recipe__unit"> ${i.unit ? i.unit : ''}</span> ${i.ingredient}
 		</div>
 	</li>
 `;

@@ -32,6 +32,7 @@
 	"dependencies": {
 		"axios": "^0.18.0",
 		"babel-polyfill": "^6.26.0",
-		"dotenv": "^6.0.0"
+		"dotenv": "^6.0.0",
+		"fraction.js": "^4.0.11"
 	}
 }

@@ -419,7 +419,7 @@ body {
     flex: 0 0 auto;
     margin-top: .1rem; }
   .recipe__count {
-    margin-right: .5rem;
+    /* margin-right: .5rem; */
     flex: 0 0 auto; }
   .recipe__directions {
     padding: 4rem;
