@@ -5,10 +5,32 @@ export const clearInput = () => {
 	// Wrapped in curly braces so there is no implicit return statement
 	elements.searchInput.value = '';
 };
+
 export const clearResults = () => {
 	elements.searchResultsList.innerHTML = '';
 	elements.searchResultsPages.innerHTML = '';
 };
+
+export const highlightSelected = id => {
+	// Remove active class from any prior selected recipes
+	// Convert HTMLCollection to an array
+	const recipeListItems = Array.from(
+		document.getElementsByClassName('results__link--active')
+	);
+
+	// Remove active class from any prior selected recipes
+	if (recipeListItems) {
+		recipeListItems.forEach(item =>
+			item.classList.remove('results__link--active')
+		);
+	}
+
+	// Add active class to currently selected recipe
+	document
+		.querySelector(`a[href="#${id}"]`)
+		.classList.add('results__link--active');
+};
+
 export const limitRecipeTitle = (title, limit = 30) => {
 	const truncTitle = [];
 	if (title.length > limit) {
