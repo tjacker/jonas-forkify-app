@@ -3,6 +3,7 @@ import Recipe from './models/Recipe';
 import ShoppingList from './models/ShoppingList';
 import * as searchView from './views/searchView';
 import * as recipeView from './views/recipeView';
+import * as shoppingListView from './views/shoppingListView';
 import { elements, renderLoader, clearLoader } from './views/base';
 
 // Store global state of the app
@@ -95,6 +96,21 @@ const controlRecipe = async () => {
 		}
 	}
 };
+
+/**
+ * SHOPPING LIST CONTROLLER
+ */
+const controlShoppingList = () => {
+	// Create a new list if none exits
+	if (!state.shoppingList) state.shoppingList = new ShoppingList();
+
+	// Add each ingredient to the list
+	state.recipe.revisedIngredients.forEach(i => {
+		const item = state.shoppingList.addItem(i.count, i.unit, i.ingredient);
+		shoppingListView.renderItem(item);
+	});
+};
+
 // Commented out load event due to a 50/day search limit
 window.addEventListener('hashchange', controlRecipe);
 // window.addEventListener('load', controlRecipe);
@@ -104,8 +120,18 @@ window.addEventListener('hashchange', controlRecipe);
 // 	window.addEventListener(event, controlRecipe)
 // );
 
-// Handle increase or decrease of servings
+// Attach click events for recipe container buttons
 elements.recipe.addEventListener('click', e => {
+	// Helper function
+	const fn = {
+		// Clear and re-render recipe
+		reRenderRecipe: recipe => {
+			recipeView.clearResults();
+			recipeView.renderRecipe(recipe);
+		}
+	};
+
+	// Handle increase or decrease of servings
 	// If target matches class selector or any of its siblings
 	// Set upper limit to 12 servings
 	if (
@@ -113,19 +139,32 @@ elements.recipe.addEventListener('click', e => {
 		state.recipe.servings < 12
 	) {
 		state.recipe.updateServings('inc');
+		fn.reRenderRecipe(state.recipe);
 		// Set lower limit to 2 servings
 	} else if (
 		e.target.matches('.btn-decrease, .btn-decrease *') &&
 		state.recipe.servings > 2
 	) {
 		state.recipe.updateServings('dec');
+		fn.reRenderRecipe(state.recipe);
 	}
-	// Clear and re-render recipe
-	recipeView.clearResults();
-	recipeView.renderRecipe(state.recipe);
+
+	// Handle adding ingredient to shopping list
+	// If target matches class selector or any of its siblings
+	if (e.target.matches('.recipe__btn--add, .recipe__btn--add *')) {
+		controlShoppingList();
+	}
 });
 
-/**
- * SHOPPING LIST CONTROLLER
- */
-window.l = new ShoppingList();
+// Attach click events for shopping list container buttons
+elements.shoppingList.addEventListener('click', e => {
+	// Get id of list item
+	const id = e.target.closest('.shopping__item').dataset.id;
+
+	// Handle deleting a list item
+	if (e.target.matches('.shopping__delete, .shopping__delete *')) {
+		// Delete item from state and UI
+		state.shoppingList.deleteItem(id);
+		shoppingListView.deleteItem(id);
+	}
+});
