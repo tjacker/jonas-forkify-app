@@ -1,4 +1,4 @@
 {
 	"editor.formatOnSave": true,
-	"cSpell.words": ["afterbegin", "beforeend"]
+	"cSpell.words": ["afterbegin", "beforeend", "nanoid"]
 }

@@ -1,5 +1,6 @@
 import Search from './models/Search';
 import Recipe from './models/Recipe';
+import ShoppingList from './models/ShoppingList';
 import * as searchView from './views/searchView';
 import * as recipeView from './views/recipeView';
 import { elements, renderLoader, clearLoader } from './views/base';
@@ -123,3 +124,8 @@ elements.recipe.addEventListener('click', e => {
 	recipeView.clearResults();
 	recipeView.renderRecipe(state.recipe);
 });
+
+/**
+ * SHOPPING LIST CONTROLLER
+ */
+window.l = new ShoppingList();
