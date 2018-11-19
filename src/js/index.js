@@ -102,3 +102,24 @@ window.addEventListener('hashchange', controlRecipe);
 // ['hashchange', 'load'].forEach(event =>
 // 	window.addEventListener(event, controlRecipe)
 // );
+
+// Handle increase or decrease of servings
+elements.recipe.addEventListener('click', e => {
+	// If target matches class selector or any of its siblings
+	// Set upper limit to 12 servings
+	if (
+		e.target.matches('.btn-increase, .btn-increase *') &&
+		state.recipe.servings < 12
+	) {
+		state.recipe.updateServings('inc');
+		// Set lower limit to 2 servings
+	} else if (
+		e.target.matches('.btn-decrease, .btn-decrease *') &&
+		state.recipe.servings > 2
+	) {
+		state.recipe.updateServings('dec');
+	}
+	// Clear and re-render recipe
+	recipeView.clearResults();
+	recipeView.renderRecipe(state.recipe);
+});

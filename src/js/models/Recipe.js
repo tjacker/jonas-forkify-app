@@ -55,8 +55,8 @@ export default class Recipe {
 				});
 				return ingredient;
 			},
-			// Remove parenthesis block the converts measurements into ounces
-			removeConversionToOz: ingredient =>
+			// Remove parenthesis block the converts measurements into ounces, grams or milliliters
+			removeConversionTo: ingredient =>
 				ingredient.replace(/ \([^()]*?(oz|g|ml)\)/i, ''),
 			// Locate position of unit of measure in ingredients array
 			getUnitIndex: array => {
@@ -100,7 +100,7 @@ export default class Recipe {
 
 		const revisedIngredients = result.ingredients.map(i => {
 			let ingredient = fn.convertUnits(i.trim());
-			ingredient = fn.removeConversionToOz(ingredient);
+			ingredient = fn.removeConversionTo(ingredient);
 
 			// Parse ingredients into count, unit, and ingredient
 			const ingredientArray = ingredient.split(' ');
@@ -113,5 +113,16 @@ export default class Recipe {
 			return ingredientObject;
 		});
 		this.revisedIngredients = revisedIngredients;
+	}
+
+	updateServings(type) {
+		// Increase or decrease new serving amount by 2
+		const newServings = type === 'inc' ? this.servings + 2 : this.servings - 2;
+		// Ingredients
+		this.revisedIngredients.forEach(i => {
+			i.count *= newServings / this.servings;
+		});
+
+		this.servings = newServings;
 	}
 }
