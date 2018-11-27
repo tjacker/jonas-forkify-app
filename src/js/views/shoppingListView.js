@@ -5,7 +5,7 @@ export const renderItem = item => {
 
 	const includeInput = (count, unit) => `
 		<div class="shopping__count">
-			<input class="shopping__count-value" type="number" value="${count}" step="1">
+			<input class="shopping__count-value" type="number" value="${count}" step="0.25">
 			<p>${unit ? unit : ''}</p>
 		</div>
 	`;

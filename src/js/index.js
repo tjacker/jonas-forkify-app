@@ -166,5 +166,11 @@ elements.shoppingList.addEventListener('click', e => {
 		// Delete item from state and UI
 		state.shoppingList.deleteItem(id);
 		shoppingListView.deleteItem(id);
+
+		// Handle updating an item's value
+	} else if (e.target.matches('.shopping__count-value')) {
+		const val = parseFloat(e.target.value, 10);
+		state.shoppingList.updateCount(id, val);
+		console.log(state);
 	}
 });
