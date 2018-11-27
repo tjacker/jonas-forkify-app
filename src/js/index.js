@@ -1,6 +1,7 @@
 import Search from './models/Search';
 import Recipe from './models/Recipe';
 import ShoppingList from './models/ShoppingList';
+import Likes from './models/Likes';
 import * as searchView from './views/searchView';
 import * as recipeView from './views/recipeView';
 import * as shoppingListView from './views/shoppingListView';
@@ -8,6 +9,7 @@ import { elements, renderLoader, clearLoader } from './views/base';
 
 // Store global state of the app
 const state = {};
+window.state = state;
 
 /**
  * SEARCH CONTROLLER
@@ -111,6 +113,31 @@ const controlShoppingList = () => {
 	});
 };
 
+/**
+ * LIKES CONTROLLER
+ */
+const controlLikes = () => {
+	const id = state.recipe.id;
+	if (!state.likes) state.likes = new Likes();
+
+	// Check if user has previously liked current recipe
+	if (!state.likes.isLiked(id)) {
+		// Add like to state
+		const { image_url, title, publisher } = state.recipe.result;
+		const like = state.likes.addLike(id, image_url, title, publisher);
+		// Toggle like button
+		// Add like to UI
+		console.log(state.likes);
+	} else {
+		// Remove like from state
+		state.likes.deleteLike(id);
+		// Toggle like button
+
+		// Remove like from state
+		console.log(state.likes);
+	}
+};
+
 // Commented out load event due to a 50/day search limit
 window.addEventListener('hashchange', controlRecipe);
 // window.addEventListener('load', controlRecipe);
@@ -153,6 +180,11 @@ elements.recipe.addEventListener('click', e => {
 	// If target matches class selector or any of its siblings
 	if (e.target.matches('.recipe__btn--add, .recipe__btn--add *')) {
 		controlShoppingList();
+	}
+
+	// Handle adding likes to likes list
+	if (e.target.matches('.recipe__likes, .recipe__likes *')) {
+		controlLikes();
 	}
 });
 
