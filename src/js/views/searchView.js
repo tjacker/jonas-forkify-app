@@ -27,7 +27,7 @@ export const highlightSelected = id => {
 
 	// Add active class to currently selected recipe
 	document
-		.querySelector(`a[href="#${id}"]`)
+		.querySelector(`.results__link[href="#${id}"]`)
 		.classList.add('results__link--active');
 };
 

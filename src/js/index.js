@@ -5,6 +5,7 @@ import Likes from './models/Likes';
 import * as searchView from './views/searchView';
 import * as recipeView from './views/recipeView';
 import * as shoppingListView from './views/shoppingListView';
+import * as likesView from './views/likesView';
 import { elements, renderLoader, clearLoader } from './views/base';
 
 // Store global state of the app
@@ -88,7 +89,7 @@ const controlRecipe = async () => {
 			clearLoader();
 
 			// Render recipe
-			recipeView.renderRecipe(state.recipe);
+			recipeView.renderRecipe(state.recipe, state.likes.isLiked(id));
 			console.dir(state.recipe);
 		} catch (error) {
 			console.error(error);
@@ -116,6 +117,12 @@ const controlShoppingList = () => {
 /**
  * LIKES CONTROLLER
  */
+
+// For testing only --------------
+state.likes = new Likes();
+likesView.toggleLikesMenu(state.likes.getLikesLength());
+// -------------------------------
+
 const controlLikes = () => {
 	const id = state.recipe.id;
 	if (!state.likes) state.likes = new Likes();
@@ -126,16 +133,22 @@ const controlLikes = () => {
 		const { image_url, title, publisher } = state.recipe.result;
 		const like = state.likes.addLike(id, image_url, title, publisher);
 		// Toggle like button
+		likesView.toggleLikeBtn(true);
+
 		// Add like to UI
-		console.log(state.likes);
+		likesView.renderLike(like);
 	} else {
 		// Remove like from state
 		state.likes.deleteLike(id);
 		// Toggle like button
+		likesView.toggleLikeBtn(false);
 
 		// Remove like from state
-		console.log(state.likes);
+		likesView.deleteLike(id);
 	}
+
+	// Check whether to display likes menu icon
+	likesView.toggleLikesMenu(state.likes.getLikesLength());
 };
 
 // Commented out load event due to a 50/day search limit
@@ -203,6 +216,5 @@ elements.shoppingList.addEventListener('click', e => {
 	} else if (e.target.matches('.shopping__count-value')) {
 		const val = parseFloat(e.target.value, 10);
 		state.shoppingList.updateCount(id, val);
-		console.log(state);
 	}
 });
