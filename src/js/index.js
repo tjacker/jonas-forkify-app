@@ -10,7 +10,6 @@ import { elements, renderLoader, clearLoader } from './views/base';
 
 // Store global state of the app
 const state = {};
-window.state = state;
 
 /**
  * SEARCH CONTROLLER
@@ -90,7 +89,6 @@ const controlRecipe = async () => {
 
 			// Render recipe
 			recipeView.renderRecipe(state.recipe, state.likes.isLiked(id));
-			console.dir(state.recipe);
 		} catch (error) {
 			console.error(error);
 			alert('Unable to retrieve selected recipe. Please try again.');
@@ -117,12 +115,6 @@ const controlShoppingList = () => {
 /**
  * LIKES CONTROLLER
  */
-
-// For testing only --------------
-state.likes = new Likes();
-likesView.toggleLikesMenu(state.likes.getLikesLength());
-// -------------------------------
-
 const controlLikes = () => {
 	const id = state.recipe.id;
 	if (!state.likes) state.likes = new Likes();
