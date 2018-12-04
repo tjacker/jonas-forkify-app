@@ -26,9 +26,12 @@ export const highlightSelected = id => {
 	}
 
 	// Add active class to currently selected recipe
-	document
-		.querySelector(`.results__link[href="#${id}"]`)
-		.classList.add('results__link--active');
+	const selectedRecipe = document.querySelector(
+		`.results__link[href="#${id}"]`
+	);
+	if (selectedRecipe) {
+		selectedRecipe.classList.add('results__link--active');
+	}
 };
 
 export const limitRecipeTitle = (title, limit = 30) => {

@@ -153,12 +153,24 @@ const controlLikes = () => {
 
 // Commented out load event due to a 50/day search limit
 window.addEventListener('hashchange', controlRecipe);
-// window.addEventListener('load', controlRecipe);
+window.addEventListener('load', controlRecipe);
 
 // The above event listeners can be created using forEach
 // ['hashchange', 'load'].forEach(event =>
 // 	window.addEventListener(event, controlRecipe)
 // );
+
+// Restore likes on page load
+window.addEventListener('load', () => {
+	state.likes = new Likes();
+	state.likes.retrieveLikes();
+
+	// Display menu button if likes exist
+	likesView.toggleLikesMenu(state.likes.getLikesLength());
+
+	// Render any existing likes
+	state.likes.likes.forEach(like => likesView.renderLike(like));
+});
 
 // Attach click events for recipe container buttons
 elements.recipe.addEventListener('click', e => {

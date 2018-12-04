@@ -6,6 +6,10 @@ export default class Likes {
 	addLike(id, image_url, title, publisher) {
 		const like = { id, image_url, title, publisher };
 		this.likes.push(like);
+
+		// Persist date in local storage
+		this.storeLikes();
+
 		return like;
 	}
 
@@ -15,6 +19,9 @@ export default class Likes {
 
 		// Update likes array by removing deleted like
 		this.likes.splice(index, 1);
+
+		// Persist date in local storage
+		this.storeLikes();
 	}
 
 	isLiked(id) {
@@ -24,5 +31,16 @@ export default class Likes {
 
 	getLikesLength() {
 		return this.likes.length;
+	}
+
+	storeLikes() {
+		localStorage.setItem('likes', JSON.stringify(this.likes));
+	}
+
+	retrieveLikes() {
+		const storage = JSON.parse(localStorage.getItem('likes'));
+
+		// Restore from local storage
+		if (storage) this.likes = storage;
 	}
 }
