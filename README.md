@@ -25,8 +25,6 @@ You will need to sign up for an API key at [Food2Fork](https://www.food2fork.com
 - JavaScript
 - [Fraction.js](https://github.com/infusion/Fraction.js)
 - [Food2Fork API](https://www.food2fork.com/about/api)
-- HTML
-- CSS
 
 ## Re-creator
 
